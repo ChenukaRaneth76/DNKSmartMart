@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
 import organicFoodsImg from './assets/IMG/organic-foods.png';
@@ -26,8 +27,22 @@ import instagramImg from './assets/IMG/instagram.png';
 import logoImg from './assets/IMG/logo.png';
 import whatsappLogo from './assets/IMG/whatsapp.webp'; // Add a WhatsApp logo image to assets
 
+const categories = [
+  { title: 'Fresh Organic Foods', img: organicImg },
+  { title: 'Organic Vegetables', img: vegetablesImg },
+  { title: 'Meat Collection', img: meatImg },
+  { title: 'Dairy Products', img: juiceImg },
+  { title: 'Bakery Items', img: funBiscuitsImg },
+  { title: 'Fresh Fruits', img: mangoImg },
+  { title: 'Snacks & Biscuits', img: beetrootImg },
+  { title: 'Beverages', img: juiceImg },
+  { title: 'Frozen Foods', img: iceCreamImg },
+];
+
 const Home = () => {
   const [showFloatingIcons, setShowFloatingIcons] = useState(false);
+  const [catIndex, setCatIndex] = useState(0);
+  const cardsToShow = 3;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,12 +56,19 @@ const Home = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handlePrev = () => {
+    setCatIndex((prev) => Math.max(prev - cardsToShow, 0));
+  };
+  const handleNext = () => {
+    setCatIndex((prev) => Math.min(prev + cardsToShow, categories.length - cardsToShow));
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <HeroSection />
 
-      {/* Top Categories */}
+      {/* Top Categories - Slider */}
       <section className="relative w-full bg-white overflow-hidden" style={{minHeight:'420px'}}>
         {/* Green triangle background (bottom left, starts below heading) */}
         <div className="absolute left-0" style={{top:'90px', width:'44vw', height:'calc(100% - 90px)', clipPath:'polygon(0 100%, 0 0, 100% 100%)', background:'#5BA150'}}></div>
@@ -56,33 +78,25 @@ const Home = () => {
         <div className="flex justify-between items-center pt-8 px-12 relative z-20">
           <h2 className="text-4xl font-extrabold text-black">Top Categories</h2>
           <div className="flex gap-4">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 bg-white shadow hover:bg-gray-100 transition">
+            <button onClick={handlePrev} disabled={catIndex === 0} className={`w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 bg-white shadow hover:bg-gray-100 transition ${catIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>
               <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="10"/><polyline points="12 8 8 12 12 16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>
             </button>
-            <button className="w-10 h-10 flex items-center justify-center rounded-full bg-green-400 shadow hover:bg-green-500 transition">
+            <button onClick={handleNext} disabled={catIndex >= categories.length - cardsToShow} className={`w-10 h-10 flex items-center justify-center rounded-full bg-green-400 shadow hover:bg-green-500 transition ${catIndex >= categories.length - cardsToShow ? 'opacity-50 cursor-not-allowed' : ''}`}>
               <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="10"/><polyline points="12 8 16 12 12 16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
             </button>
           </div>
         </div>
-        {/* Category cards - modern 3D style */}
-        <div className="flex flex-row items-end justify-end gap-8 pr-12 pt-8 relative z-20" style={{marginLeft:'420px'}}>
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-2xl hover:shadow-3xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center w-56 h-64 p-6" style={{boxShadow:'0 8px 24px 0 rgba(90,130,80,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.10)'}}>
-            <span className="font-semibold mb-4">Fresh Organic Foods</span>
-            <div className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center bg-gray-100 mb-4 border-4 border-white shadow-lg">
-              <img src={organicImg} alt="Fresh Organic Foods" className="object-cover w-full h-full" />
-            </div>
-          </div>
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-2xl hover:shadow-3xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center w-56 h-64 p-6" style={{boxShadow:'0 8px 24px 0 rgba(90,130,80,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.10)'}}>
-            <span className="font-semibold mb-4">Organic Vegetables</span>
-            <div className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center bg-gray-100 mb-4 border-4 border-white shadow-lg">
-              <img src={vegetablesImg} alt="Organic Vegetables" className="object-cover w-full h-full" />
-            </div>
-          </div>
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-2xl hover:shadow-3xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center w-56 h-64 p-6" style={{boxShadow:'0 8px 24px 0 rgba(90,130,80,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.10)'}}>
-            <span className="font-semibold mb-4">Meat Collection</span>
-            <div className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center bg-gray-100 mb-4 border-4 border-white shadow-lg">
-              <img src={meatImg} alt="Meat Collection" className="object-cover w-full h-full" />
-            </div>
+        {/* Category cards - slider */}
+        <div className="overflow-hidden w-full relative z-20" style={{marginLeft:'420px', paddingRight:'48px', maxWidth: `${cardsToShow * 288 + 64}px`}}>
+          <div className="flex transition-transform duration-500" style={{transform:`translateX(-${catIndex * 288}px)`}}>
+            {categories.map((cat) => (
+              <div key={cat.title} className="bg-white rounded-2xl border border-gray-100 shadow-2xl hover:shadow-3xl hover:-translate-y-2 transition-all duration-300 flex flex-col items-center w-64 h-64 p-6 mx-4" style={{boxShadow:'0 8px 24px 0 rgba(90,130,80,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.10)'}}>
+                <span className="font-semibold mb-4">{cat.title}</span>
+                <div className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center bg-gray-100 mb-4 border-4 border-white shadow-lg">
+                  <img src={cat.img} alt={cat.title} className="object-cover w-full h-full" />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -136,22 +150,24 @@ const Home = () => {
         <h2 className="text-4xl font-extrabold text-center mb-12 z-10 relative">New Arrival Products</h2>
         <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 px-8 max-w-6xl mx-auto">
           {/* Card 1 */}
-          <div className="bg-white rounded-2xl shadow-2xl hover:shadow-3xl hover:-translate-y-2 transition-all duration-300 p-6 flex flex-col items-center relative min-h-[320px]">
-            {/* Badge and Cart */}
-            <span className="absolute left-4 top-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">20%</span>
-            <span className="absolute right-4 top-4 text-green-500 cursor-pointer">
-              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
-            </span>
-            <img src={iceCreamImg} alt="Ice Cream" className="h-24 object-contain my-4" />
-            <div className="font-semibold text-center mt-2">Imorich I/C Choc Choc Chip 1L</div>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-red-600 font-bold">Rs. 1,198.00</span>
-              <span className="text-gray-400 line-through text-sm">Rs. 1,300.00</span>
+          <Link to="/product" className="block">
+            <div className="bg-white rounded-2xl shadow-2xl hover:shadow-3xl hover:-translate-y-2 transition-all duration-300 p-6 flex flex-col items-center relative min-h-[320px]">
+              {/* Badge and Cart */}
+              <span className="absolute left-4 top-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">20%</span>
+              <span className="absolute right-4 top-4 text-green-500 cursor-pointer">
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+              </span>
+              <img src={iceCreamImg} alt="Ice Cream" className="h-24 object-contain my-4" />
+              <div className="font-semibold text-center mt-2">Imorich I/C Choc Choc Chip 1L</div>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-red-600 font-bold">Rs. 1,198.00</span>
+                <span className="text-gray-400 line-through text-sm">Rs. 1,300.00</span>
+              </div>
+              <div className="flex gap-1 mt-2">
+                <span className="text-yellow-400">★</span><span className="text-yellow-400">★</span><span className="text-yellow-400">★</span><span className="text-yellow-400">★</span><span className="text-gray-300">★</span>
+              </div>
             </div>
-            <div className="flex gap-1 mt-2">
-              <span className="text-yellow-400">★</span><span className="text-yellow-400">★</span><span className="text-yellow-400">★</span><span className="text-yellow-400">★</span><span className="text-gray-300">★</span>
-            </div>
-          </div>
+          </Link>
           {/* Card 2 */}
           <div className="bg-white rounded-2xl shadow-2xl hover:shadow-3xl hover:-translate-y-2 transition-all duration-300 p-6 flex flex-col items-center relative min-h-[320px]">
             <span className="absolute left-4 top-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">20%</span>
@@ -250,8 +266,8 @@ const Home = () => {
             </div>
             <div className="text-gray-700 text-center mb-8">“Always fresh and clean! I love how the fruits and vegetables stay crisp even after delivery.”</div>
             <div className="flex items-center gap-3 mt-auto">
-              <img src={user1Img} alt="User 1" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow" />
-              <span className="text-sm font-semibold text-gray-700">Kaveesha Randunu</span>
+              <img src={user2Img} alt="User 1" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow" />
+              <span className="text-sm font-semibold text-gray-700">Pasindu Sathsara</span>
             </div>
           </div>
           {/* Card 2 */}
@@ -261,7 +277,7 @@ const Home = () => {
             </div>
             <div className="text-gray-700 text-center mb-8">“Super fast delivery and great prices. This is my go-to place for all groceries!”</div>
             <div className="flex items-center gap-3 mt-auto">
-              <img src={user2Img} alt="User 2" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow" />
+              <img src={user1Img} alt="User 2" className="h-10 w-10 rounded-full object-cover border-2 border-white shadow" />
               <span className="text-sm font-semibold text-gray-700">Ashen Chamaluditha</span>
             </div>
           </div>

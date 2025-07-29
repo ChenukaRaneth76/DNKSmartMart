@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import ownerImg from './assets/IMG/user1.png';
+import ownerImg from './assets/IMG/owner.jpg';
 import happyCustomersImg from './assets/IMG/user-group.jpg'; // Group of happy customers
 import deliveryGuyImg from './assets/IMG/delivery-guy.png'; // Delivery guy with groceries
+import user1Img from './assets/IMG/user1.png';
 import user2Img from './assets/IMG/user2.png';
 import user3Img from './assets/IMG/user3.png';
 
@@ -41,12 +42,12 @@ const features = [
 
 const testimonials = [
   {
-    img: ownerImg,
-    name: 'Kaveesha Randunu',
+    img: user2Img,
+    name: 'Pasindu Sathsara',
     text: 'Always fresh and clean! I love how the fruits and vegetables stay crisp even after delivery.'
   },
   {
-    img: user2Img,
+    img: user1Img,
     name: 'Ashen Chamaluditha',
     text: 'Super fast delivery and great prices. This is my go-to place for all groceries!'
   },
