@@ -3,6 +3,49 @@ import { Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
+// Extracted utility functions to reduce nesting
+const getStatusColor = (status) => {
+  const colors = {
+    pending: 'text-blue-600',
+    confirmed: 'text-green-600',
+    ready: 'text-yellow-600',
+    completed: 'text-green-700'
+  };
+  return colors[status] || 'text-gray-600';
+};
+
+const getStatusBgColor = (status) => {
+  const colors = {
+    pending: 'bg-blue-100',
+    confirmed: 'bg-green-100',
+    ready: 'bg-yellow-100',
+    completed: 'bg-green-100'
+  };
+  return colors[status] || 'bg-gray-100';
+};
+
+const createStatusUpdate = (status, message) => ({
+  status,
+  message,
+  timestamp: new Date().toISOString()
+});
+
+const updateOrderStatus = (prevOrder, newStatus, message) => {
+  if (!prevOrder) return prevOrder;
+  
+  const updatedOrder = {
+    ...prevOrder,
+    status: newStatus,
+    statusHistory: [
+      ...prevOrder.statusHistory,
+      createStatusUpdate(newStatus, message)
+    ]
+  };
+  
+  localStorage.setItem('lastOrder', JSON.stringify(updatedOrder));
+  return updatedOrder;
+};
+
 const TrackOrder = () => {
   const [orderDetails, setOrderDetails] = useState(null);
   const [currentStatus, setCurrentStatus] = useState('pending');
@@ -58,7 +101,7 @@ const TrackOrder = () => {
     setLoading(false);
   }, []);
 
-  // Optimized status updates with cleanup
+  // Simplified status updates with extracted logic
   useEffect(() => {
     if (!orderDetails) return;
 
@@ -72,53 +115,13 @@ const TrackOrder = () => {
       return setTimeout(() => {
         if (currentStatus === update.status) return;
         
-        setOrderDetails(prev => {
-          if (!prev) return prev;
-          
-          const updatedOrder = {
-            ...prev,
-            status: update.status,
-            statusHistory: [
-              ...prev.statusHistory,
-              {
-                status: update.status,
-                message: update.message,
-                timestamp: new Date().toISOString()
-              }
-            ]
-          };
-          
-          localStorage.setItem('lastOrder', JSON.stringify(updatedOrder));
-          return updatedOrder;
-        });
-        
+        setOrderDetails(prev => updateOrderStatus(prev, update.status, update.message));
         setCurrentStatus(update.status);
       }, update.delay);
     });
 
     return () => timers.forEach(timer => clearTimeout(timer));
   }, [orderDetails, currentStatus]);
-
-  // Memoized utility functions
-  const getStatusColor = useMemo(() => (status) => {
-    const colors = {
-      pending: 'text-blue-600',
-      confirmed: 'text-green-600',
-      ready: 'text-yellow-600',
-      completed: 'text-green-700'
-    };
-    return colors[status] || 'text-gray-600';
-  }, []);
-
-  const getStatusBgColor = useMemo(() => (status) => {
-    const colors = {
-      pending: 'bg-blue-100',
-      confirmed: 'bg-green-100',
-      ready: 'bg-yellow-100',
-      completed: 'bg-green-100'
-    };
-    return colors[status] || 'bg-gray-100';
-  }, []);
 
   // Loading state
   if (loading) {
