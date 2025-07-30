@@ -1,14 +1,47 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import iceCreamImg from './assets/IMG/ice-cream.jpg';
-import mangoImg from './assets/IMG/mango.jpg';
-import watermelonImg from './assets/IMG/watermelon.jpg';
-import funBiscuitsImg from './assets/IMG/fun-biscuits.jpg';
-
+import iceCreamImg from './assets/IMG/ice-cream.webp';
+import mangoImg from './assets/IMG/mango.webp';
+import watermelonImg from './assets/IMG/watermelon.webp';
+import funBiscuitsImg from './assets/IMG/fun-biscuits.webp';
 
 const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
+
+  const handleAddToCart = () => {
+    const product = {
+      id: 'ice-cream-1',
+      name: 'Imorich I/C Choc Choc Chip 1L',
+      price: 'Rs. 1,198.00',
+      image: iceCreamImg,
+      quantity: quantity
+    };
+
+    // Get existing cart from localStorage
+    const existingCart = localStorage.getItem('cart');
+    const cart = existingCart ? JSON.parse(existingCart) : [];
+
+    // Check if product already exists in cart
+    const existingItemIndex = cart.findIndex(item => item.id === product.id);
+
+    if (existingItemIndex >= 0) {
+      // Update quantity if product already exists
+      cart[existingItemIndex].quantity += quantity;
+    } else {
+      // Add new product to cart
+      cart.push(product);
+    }
+
+    // Save updated cart to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Trigger cart update event for Navbar
+    window.dispatchEvent(new Event('cartUpdated'));
+
+    // Show success message (you can add a toast notification here)
+    alert('Product added to cart successfully!');
+  };
 
   const handleQuantityChange = (increment) => {
     const newQuantity = quantity + increment;
@@ -45,11 +78,11 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen flex flex-col">
       <Navbar />
       
       {/* Product Detail Section */}
-      <section className="relative w-full py-16 bg-white">
+      <section className="relative w-full py-16 bg-white flex-1">
         {/* Faded background text */}
         <span className="absolute right-4 top-6 text-[64px] md:text-[90px] font-extrabold text-green-200 opacity-30 select-none pointer-events-none z-0 rotate-90" style={{fontFamily:"'Poppins', sans-serif"}}>Products</span>
         
@@ -58,10 +91,12 @@ const ProductDetail = () => {
             {/* Left Column - Product Image */}
             <div className="flex justify-center">
               <div className="bg-white rounded-2xl border-2 border-green-100 shadow-lg p-8 max-w-md">
-                <img 
-                  src={iceCreamImg} 
-                  alt="Imorich I/C Choc Choc Chip 1L" 
+                <img
+                  src={iceCreamImg}
+                  alt="Imorich I/C Choc Choc Chip 1L"
                   className="w-full h-auto object-contain"
+                  width="500"
+                  height="500"
                 />
               </div>
             </div>
@@ -87,12 +122,12 @@ const ProductDetail = () => {
                 <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                 <span className="text-green-600 font-medium">In Stock</span>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
                   <span className="text-gray-700 font-medium">Quantity:</span>
                   <div className="flex items-center border border-gray-300 rounded-lg">
-                    <button 
+                    <button
                       onClick={() => handleQuantityChange(-1)}
                       className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition"
                     >
@@ -101,7 +136,7 @@ const ProductDetail = () => {
                     <span className="px-6 py-2 border-x border-gray-300 font-medium">
                       {quantity}
                     </span>
-                    <button 
+                    <button
                       onClick={() => handleQuantityChange(1)}
                       className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition"
                     >
@@ -110,7 +145,10 @@ const ProductDetail = () => {
                   </div>
                 </div>
                 
-                <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition duration-300 shadow-lg">
+                <button 
+                  onClick={handleAddToCart}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-4 px-8 rounded-lg text-lg transition duration-300 shadow-lg"
+                >
                   Add To Cart
                 </button>
               </div>
@@ -158,7 +196,7 @@ const ProductDetail = () => {
                   <span className="text-red-600 font-bold">{product.price}</span>
                   <span className="text-gray-400 line-through text-sm">{product.originalPrice}</span>
                 </div>
-                
+
                 {/* Rating */}
                 <div className="flex gap-1 mt-2">
                   <span className="text-yellow-400">★</span>
@@ -172,8 +210,10 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
+      
+      <div className="mt-auto">
+        <Footer />
+      </div>
     </div>
   );
 };

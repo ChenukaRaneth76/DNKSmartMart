@@ -7,8 +7,8 @@ import bananaImg from './assets/IMG/banana.jpg';
 import avacadoImg from './assets/IMG/avacado.jpg';
 import delumImg from './assets/IMG/delum.jpg';
 import dragonfruitImg from './assets/IMG/dragon-fruit.jpg';
-import mangoImg from './assets/IMG/mango.jpg';
-import watermelonImg from './assets/IMG/watermelon.jpg';
+import mangoImg from './assets/IMG/mango.webp';
+import watermelonImg from './assets/IMG/watermelon.webp';
 import grapesImg from './assets/IMG/grapes.jpg';
 
 const Categories = () => {
@@ -140,7 +140,7 @@ const Categories = () => {
       </section>
 
       {/* Products Section */}
-      <section className="py-16">
+      <main className="py-16">
         <div className="max-w-6xl mx-auto px-8">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold text-gray-900">{selectedCategory}</h2>
@@ -176,6 +176,9 @@ const Categories = () => {
                 <img 
                   src={product.image} 
                   alt={product.name} 
+                  loading="lazy"
+                  width="128"
+                  height="128"
                   className="h-32 object-contain my-4"
                 />
                 
@@ -208,7 +211,7 @@ const Categories = () => {
             ))}
           </div>
         </div>
-      </section>
+      </main>
 
       <Footer />
     </div>

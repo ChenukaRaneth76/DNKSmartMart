@@ -2,12 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import ownerImg from './assets/IMG/owner.jpg';
-import happyCustomersImg from './assets/IMG/user-group.jpg'; // Group of happy customers
-import deliveryGuyImg from './assets/IMG/delivery-guy.png'; // Delivery guy with groceries
-import user1Img from './assets/IMG/user1.png';
-import user2Img from './assets/IMG/user2.png';
-import user3Img from './assets/IMG/user3.png';
+import ownerImg from './assets/IMG/owner.webp';
+import happyCustomersImg from './assets/IMG/user-group.webp'; // Group of happy customers
+import deliveryGuyImg from './assets/IMG/delivery-guy.webp'; // Delivery guy with groceries
+import user1Img from './assets/IMG/user1.webp';
+import user2Img from './assets/IMG/user2.webp';
+import user3Img from './assets/IMG/user3.webp';
 
 const features = [
   {

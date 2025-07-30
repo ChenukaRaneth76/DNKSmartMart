@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import groceryGirlImg from '../assets/IMG/grocery-girl.png';
+import groceryGirlWebp from '../assets/IMG/grocery-girl.webp';
 
 const HERO_TEXT = 'Make Health Life With Fresh Grocery';
 
@@ -35,8 +35,11 @@ const HeroSection = () => {
       <div className="flex-1 flex items-end justify-end relative min-w-[400px] md:min-w-[600px] h-[420px] md:h-[520px]">
         {/* True oval/ellipse green platform */}
         <div className="absolute right-10 bottom-6 w-[420px] h-[90px] bg-green-400 rounded-full -z-10 opacity-90"></div>
-        {/* Grocery Girl Image */}
-        <img src={groceryGirlImg} alt="Grocery Girl" className="h-[480px] md:h-[560px] object-contain z-10 drop-shadow-2xl absolute right-10 bottom-0" style={{maxHeight:'100%', maxWidth:'100%', width:'auto'}} />
+        {/* Grocery Girl Image with webp fallback */}
+        <picture>
+          <source srcSet={groceryGirlWebp} type="image/webp" />
+          <img src={groceryGirlWebp} alt="Grocery Girl" width="400" height="560" className="h-[480px] md:h-[560px] object-contain z-10 drop-shadow-2xl absolute right-10 bottom-0" style={{maxHeight:'100%', maxWidth:'100%', width:'auto'}} />
+        </picture>
       </div>
       <style>{`
         .animate-hero-gradient {

@@ -11,16 +11,16 @@ const Footer = () => (
       {/* Logo and description */}
       <div className="flex flex-col items-center mb-6">
         <span className="flex items-center justify-center bg-white rounded-full p-3 mb-2" style={{width:'60px',height:'60px'}}>
-          <img src={logoImg} alt="Logo" className="h-10 w-10 object-contain" />
+          <img src={logoImg} alt="Logo" width="40" height="40" className="h-10 w-10 object-contain" />
         </span>
         <span className="font-bold text-white text-lg mb-2">DNK SUPER</span>
         <div className="text-green-100 text-center text-sm max-w-md mb-4">Discover fresh produce, daily essentials, and exclusive deals — delivered straight to your doorstep with care.</div>
         {/* Social icons */}
         <div className="flex gap-4 mt-2 mb-2">
-          <img src={tiktokImg} alt="TikTok" className="h-8 w-8 object-contain" />
-          <img src={instagramImg} alt="Instagram" className="h-8 w-8 object-contain" />
-          <img src={facebookImg} alt="Facebook" className="h-8 w-8 object-contain" />
-          <img src={linkedinImg} alt="LinkedIn" className="h-8 w-8 object-contain" />
+          <img src={tiktokImg} alt="TikTok" width="32" height="32" className="h-8 w-8 object-contain" />
+          <img src={instagramImg} alt="Instagram" width="32" height="32" className="h-8 w-8 object-contain" />
+          <img src={facebookImg} alt="Facebook" width="32" height="32" className="h-8 w-8 object-contain" />
+          <img src={linkedinImg} alt="LinkedIn" width="32" height="32" className="h-8 w-8 object-contain" />
         </div>
       </div>
       {/* Divider */}
