@@ -14,6 +14,10 @@ import AdminLogin from './AdminLogin.jsx'
 import AdminDashboard from './AdminDashboard.jsx'
 import AdminOverview from './AdminOverview.jsx'
 import AdminOrders from './AdminOrders.jsx'
+import AdminProducts from './AdminProducts.jsx'
+import AdminCategories from './AdminCategories.jsx'
+import AdminUsers from './AdminUsers.jsx'
+import AdminSettings from './AdminSettings.jsx'
 
 // Register service worker for better performance
 if ('serviceWorker' in navigator) {
@@ -46,6 +50,10 @@ createRoot(document.getElementById('root')).render(
         <Route path="/admin" element={<AdminDashboard />}>
           <Route path="dashboard" element={<AdminOverview />} />
           <Route path="orders" element={<AdminOrders />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="categories" element={<AdminCategories />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="settings" element={<AdminSettings />} />
           <Route path="" element={<AdminOverview />} />
         </Route>
       </Routes>

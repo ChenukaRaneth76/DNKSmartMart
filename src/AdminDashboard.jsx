@@ -30,8 +30,8 @@ const AdminDashboard = () => {
     { name: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
     { name: 'Orders', href: '/admin/orders', icon: '📦' },
     { name: 'Products', href: '/admin/products', icon: '🛍️' },
-    { name: 'Customers', href: '/admin/customers', icon: '👥' },
-    { name: 'Analytics', href: '/admin/analytics', icon: '📈' },
+    { name: 'Categories', href: '/admin/categories', icon: '📁' },
+    { name: 'Users', href: '/admin/users', icon: '👥' },
     { name: 'Settings', href: '/admin/settings', icon: '⚙️' },
   ];
 
