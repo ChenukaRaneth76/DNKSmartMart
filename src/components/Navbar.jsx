@@ -11,6 +11,44 @@ import funBiscuitsImg from '../assets/IMG/fun-biscuits.webp';
 import beetrootImg from '../assets/IMG/beetroot.webp';
 import mangoImg from '../assets/IMG/mango.webp';
 
+// Extracted constants
+const ADMIN_CREDENTIALS = {
+  email: 'admin@dnksuper.com',
+  password: 'admin123'
+};
+
+const categories = [
+  { title: 'Fresh Organic Foods', img: organicImg },
+  { title: 'Organic Vegetables', img: vegetablesImg },
+  { title: 'Meat Collection', img: meatImg },
+  { title: 'Dairy Products', img: juiceImg },
+  { title: 'Bakery Items', img: funBiscuitsImg },
+  { title: 'Fresh Fruits', img: mangoImg },
+  { title: 'Snacks & Biscuits', img: beetrootImg },
+  { title: 'Beverages', img: juiceImg },
+  { title: 'Frozen Foods', img: iceCreamImg },
+];
+
+// Extracted utility functions
+const handleAdminLogin = (credentials) => {
+  if (credentials.email === ADMIN_CREDENTIALS.email && 
+      credentials.password === ADMIN_CREDENTIALS.password) {
+    localStorage.setItem('adminLoggedIn', 'true');
+    localStorage.setItem('adminUser', JSON.stringify({
+      email: credentials.email,
+      username: credentials.email.split('@')[0],
+      loginTime: new Date().toISOString()
+    }));
+    return { success: true };
+  }
+  return { success: false, error: 'Invalid admin credentials' };
+};
+
+const handleCustomerLogin = () => {
+  console.log('Customer login submitted');
+  return { success: true };
+};
+
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
@@ -22,18 +60,6 @@ const Navbar = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
-
-  const categories = [
-    { title: 'Fresh Organic Foods', img: organicImg },
-    { title: 'Organic Vegetables', img: vegetablesImg },
-    { title: 'Meat Collection', img: meatImg },
-    { title: 'Dairy Products', img: juiceImg },
-    { title: 'Bakery Items', img: funBiscuitsImg },
-    { title: 'Fresh Fruits', img: mangoImg },
-    { title: 'Snacks & Biscuits', img: beetrootImg },
-    { title: 'Beverages', img: juiceImg },
-    { title: 'Frozen Foods', img: iceCreamImg },
-  ];
 
   // Get cart items from localStorage on component mount
   useEffect(() => {
@@ -73,6 +99,7 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Simplified handleSubmit with reduced cognitive complexity
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -81,34 +108,20 @@ const Navbar = () => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (isAdminLogin) {
-      // Admin login logic
-      const ADMIN_CREDENTIALS = {
-        email: 'admin@dnksuper.com',
-        password: 'admin123'
-      };
+    const result = isAdminLogin 
+      ? handleAdminLogin(credentials)
+      : handleCustomerLogin();
 
-      if (credentials.email === ADMIN_CREDENTIALS.email && 
-          credentials.password === ADMIN_CREDENTIALS.password) {
-        localStorage.setItem('adminLoggedIn', 'true');
-        localStorage.setItem('adminUser', JSON.stringify({
-          email: credentials.email,
-          username: credentials.email.split('@')[0],
-          loginTime: new Date().toISOString()
-        }));
-        setShowModal(false);
-        setCredentials({ email: '', password: '' });
-        setIsAdminLogin(false);
-        // Redirect to admin dashboard
-        window.location.href = '/admin/dashboard';
-      } else {
-        setError('Invalid admin credentials');
-      }
-    } else {
-      // Customer login logic
-      console.log('Customer login submitted');
+    if (result.success) {
       setShowModal(false);
       setCredentials({ email: '', password: '' });
+      setIsAdminLogin(false);
+      
+      if (isAdminLogin) {
+        window.location.href = '/admin/dashboard';
+      }
+    } else {
+      setError(result.error);
     }
     
     setLoading(false);
